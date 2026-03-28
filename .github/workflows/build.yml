@@ -7,6 +7,9 @@ on:
 
 permissions: write-all
 
+env: 
+    BISON_VERSION: 2.3
+
 jobs:
   cross-build:
     runs-on: ubuntu-latest
@@ -186,10 +189,10 @@ jobs:
         
         sudo apt-get install autopoint
         
-        wget 'https://ftp.gnu.org/gnu/bison/bison-2.7.1.tar.xz'
-        tar --extract --file='bison-2.7.1.tar.xz'
+        wget 'https://ftp.gnu.org/gnu/bison/bison-${{ env.BISON_VERSION }}.tar.xz'
+        tar --extract --file='bison-${{ env.BISON_VERSION }}.tar.xz'
         
-        cd bison-2.7.1
+        cd bison-${{ env.BISON_VERSION }}
         mkdir build
         cd build
         
@@ -237,13 +240,13 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@master
         with:
-          tag_name: 'nightly'
-          name: 'Bison Legacy'
+          tag_name: '${{ env.BISON_VERSION }}'
+          name: 'Bison v${{ env.BISON_VERSION }}'
           files: ./*/*.{tar.xz,zip}
           draft: false
           prerelease: false
           fail_on_unmatched_files: true
-          body: '* Bison Legacy'
+          body: '* Bison v${{ env.BISON_VERSION }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
